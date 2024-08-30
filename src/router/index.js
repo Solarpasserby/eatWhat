@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import crud from '../views/CRUD.vue'
-import review from '../views/Review.vue'
+import login from '../views/Login.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,9 +11,9 @@ const router = createRouter({
       component: crud
     },
     {
-      path: '/review',
-      name: 'review',
-      component: review
+      path: '/login',
+      name: 'login',
+      component: login
     }
   ]
 })
