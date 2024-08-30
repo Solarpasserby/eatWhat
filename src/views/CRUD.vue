@@ -5,10 +5,11 @@ import ExcelJS from "exceljs";
 import FileSaver from "file-saver";
 
 import {
-    getDishesByCanteen, getNewDishes, getDishById, getCarousel, postUploadExcel, postAddDish, postCarousel, postNewDish, putEditDish, deleteDishById, deleteNewDish
+    authorize, getDishesByCanteen, getNewDishes, getDishById, getCarousel, postUploadExcel, postAddDish, postCarousel, postNewDish, putEditDish, deleteDishById, deleteNewDish
 } from '@/api/http'
 
 onMounted(() => {
+    authorize();
     getRawData(1);
     getNewDishesData(1);
     getNewDishesData(2);

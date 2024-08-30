@@ -47,6 +47,7 @@ import OffUrl from "@/assets/image/off.png";
 import { onMounted, ref } from "vue";
 import { useRouter } from 'vue-router';
 import axios from "axios";
+import { authorize } from '../api/http'
 
 const showFirstImage = ref(0)
 const username = ref("")
@@ -57,6 +58,7 @@ const router = useRouter();
 // const tokenStr = localStorage.getItem('token')
 
 onMounted(()=>{
+  authorize();
   if (userStr) {
     var list = JSON.parse(userStr);  
     username.value = list.username

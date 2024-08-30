@@ -1,7 +1,5 @@
 import axios from "axios";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
+import router from "@/router";
 
 const instance = axios.create({
   baseURL: "https://eat.vincent.0nline.tech/",
@@ -74,7 +72,6 @@ instance.interceptors.response.use(
               return instance(config);
             },
             (err) => {
-              alert(error.response.data.message);
               router.push("/login"); //跳转到登录页
             }
           )
@@ -100,6 +97,16 @@ instance.interceptors.response.use(
     return Promise.reject(error.response);
   }
 );
+
+async function authorize() {
+  try {
+    const res = await instance.get(`/users/admin/me`);
+    if (res) router.push('/crud');
+  } catch {
+    console.log(error);
+    router.push('/login');
+  }
+}
 
 async function getDishesByCanteen(canteen) {
   try {
@@ -175,6 +182,7 @@ function deleteNewDish(id) {
 
 export {
   setToken,
+  authorize,
   getDishesByCanteen,
   getNewDishes,
   getDishById,
