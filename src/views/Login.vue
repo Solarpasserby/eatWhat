@@ -18,7 +18,7 @@
           </label>
       </div>
       <div class="form-control">
-          <input v-model="password" type="value" required="">
+          <input v-model="password" type="password" required="">
           <label>
               <span style="transition-delay:0ms">P</span><span style="transition-delay:50ms">a</span><span style="transition-delay:100ms">s</span><span style="transition-delay:150ms">s</span><span style="transition-delay:200ms">w</span><span style="transition-delay:250ms">o</span><span style="transition-delay:300ms">r</span><span style="transition-delay:350ms">d</span>
           </label>
@@ -45,6 +45,7 @@ import videoUrl from "@/assets/video/login_bg_media.mp4";
 import OnUrl from "@/assets/image/on.png";
 import OffUrl from "@/assets/image/off.png";
 import { onMounted, ref } from "vue";
+import { useRouter } from 'vue-router';
 import axios from "axios";
 
 const showFirstImage = ref(0)
@@ -52,12 +53,12 @@ const username = ref("")
 const password = ref("")
 const error = ref(null)
 const userStr = localStorage.getItem('user')
+const router = useRouter();
 // const tokenStr = localStorage.getItem('token')
 
 onMounted(()=>{
   if (userStr) {
     var list = JSON.parse(userStr);  
-    console.log(list)
     username.value = list.username
     password.value = list.password
     showFirstImage.value = list.value
@@ -103,23 +104,18 @@ const handleLogin = async () => {
         'Content-Type': 'multipartx/form-data'
       } 
   });  
-    // 处理登录成功后的逻辑  
-    console.log('Login successful', response.data);  
-    var jsonObj = {}
-    response.data.forEach((value, key) => (jsonObj[key] = value));
-    localStorage.setItem('token', jsonObj)
-    // 这里可以添加路由跳转等逻辑  
-
-
+    // 处理登录成功后的逻辑
+    var jsonObj = response.data
+    // response.data.forEach((value, key) => (jsonObj[key] = value));
+    console.log(typeof(jsonObj));
+    console.log(jsonObj);
+    localStorage.setItem('token', response.data.access_token);
+    localStorage.setItem('rawToken', JSON.stringify(jsonObj));
+    // 这里可以添加路由跳转等逻辑
+    router.push('/crud');
   } catch (error) {  
-    if (error.response && error.response.data) {  
-      // 假设后端返回了错误信息  
-      error.value = error.response.data.message || 'Login failed';  
-    } else {  
-      error.value = 'An error occurred';  
-    }  
+    console.log(error);
   }  
-  console.log(error)
 }
 
 

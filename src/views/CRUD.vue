@@ -10,8 +10,8 @@ import {
 
 onMounted(() => {
     getRawData(1);
-    // getNewDishesData(1);
-    // getNewDishesData(2);
+    getNewDishesData(1);
+    getNewDishesData(2);
 });
 
 var file = null;
@@ -45,75 +45,7 @@ const floorDict = ['', '一楼', '二楼', '三楼', '四楼'];
 
 const rawData = ref([]);
 // const newDishesData = ref([[], [], []]);
-const newDishesData = ref([[], [
-    {
-        "canteen": 1,
-        "floor": 1,
-        "window": 2,
-        "name": "黄焖鸡",
-        "measure": "1份",
-        "price": 12,
-        "id": 1,
-        "average_vote": 2.5,
-        "image": null
-    },
-    {
-        "canteen": 1,
-        "floor": 1,
-        "window": 2,
-        "name": "黄焖鸡",
-        "measure": "1份",
-        "price": 12,
-        "id": 2,
-        "average_vote": 2.5,
-        "image": null
-    },
-    {
-        "canteen": 1,
-        "floor": 1,
-        "window": 2,
-        "name": "黄焖鸡",
-        "measure": "1份",
-        "price": 12,
-        "id": 3,
-        "average_vote": 2.5,
-        "image": null
-    }
-], [
-    {
-        "canteen": 1,
-        "floor": 1,
-        "window": 2,
-        "name": "黄焖鸡",
-        "measure": "1份",
-        "price": 12,
-        "id": 1,
-        "average_vote": 2.5,
-        "image": null
-    },
-    {
-        "canteen": 1,
-        "floor": 1,
-        "window": 2,
-        "name": "黄焖鸡",
-        "measure": "1份",
-        "price": 12,
-        "id": 2,
-        "average_vote": 2.5,
-        "image": null
-    },
-    {
-        "canteen": 1,
-        "floor": 1,
-        "window": 2,
-        "name": "黄焖鸡",
-        "measure": "1份",
-        "price": 12,
-        "id": 3,
-        "average_vote": 2.5,
-        "image": null
-    }
-]]);
+const newDishesData = ref([[], [], []]);
 
 const search = ref('');
 const imageSrc = ref('https//:www.114514.com')
@@ -178,7 +110,6 @@ const getRawData = async (canteen) => {
     rawData.value = await getDishesByCanteen(canteen || refresh);
     refresh = canteen || refresh;
 }
-const getUpdateData = async (id) => rawData.value[id - 1] = await getDishById(id);
 // 这边得到的是数组，所以用了里面的值
 const getCarouselData = async (canteen) => imageSrc.value = await getCarousel(canteen)[0];
 const getNewDishesData = async (canteen) => newDishesData.value[canteen] = await getNewDishes(canteen);
@@ -193,7 +124,7 @@ const handleEdit = (dish) => {
 const handleDelete = (id, name) => {
     if (confirm(`请确认是否删除 ${id} 号菜品 ${name} `)) {
         deleteDishById(id).then((res) => {
-            console.log(res);
+            getRawData(0);
         }).catch((error) => {
             console.log(error);
         })
@@ -201,14 +132,16 @@ const handleDelete = (id, name) => {
 }
 const handleNewDishAdd = () => {
     postNewDish(addDish.value).then((res) => {
-        console.log(res);
+        getNewDishesData(1);
+        getNewDishesData(2);
     }).catch((error) => {
         console.log(error);
     })
 }
 const handleNewDishDelete = (id) => {
     deleteNewDish(id).then((res) => {
-        console.log(res);
+        getNewDishesData(1);
+        getNewDishesData(2);
     }).catch((error) => {
         console.log(error);
     })
@@ -253,8 +186,7 @@ const handleEditFormComfirm = () => {
         "id": tmp2.id,
     }
     putEditDish(csPut).then((res) => {
-        getUpdateData(csPut.id);
-        console.log(res);
+        getRawData(0);
     }).catch((error) => {
         console.log(error);
     });
@@ -262,9 +194,8 @@ const handleEditFormComfirm = () => {
     resetCsChangedData();
 }
 const handleAddFormComfirm = () => {
-    postAddDish(csAddData).then((res) => {
-        getUpdateData(csPut.id);
-        console.log(res);
+    postAddDish(csAddData.value).then((res) => {
+        getRawData(0);
     }).catch((error) => {
         console.log(error);
     });
